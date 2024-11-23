@@ -11,10 +11,8 @@ jobs:
       - name: Create results directory
         run: mkdir -p scan-results
       
-      - uses: docker://docker.io/fluidattacks/cli:latest
-        name: machineStandalone
-        with:
-          args: skims scan ./config.yml > scan-results/scan-output.txt
+      - name: Run Fluidattacks scan
+        run: docker run --rm -v ${PWD}:/work -w /work fluidattacks/cli:latest skims scan ./config.yml | tee scan-results/scan-output.txt
       
       - name: Generate summary report
         run: |
