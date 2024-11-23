@@ -14,17 +14,14 @@ jobs:
       - uses: docker://docker.io/fluidattacks/cli:latest
         name: machineStandalone
         with:
-          args: skims scan ./config.yml --output-file ./scan-results/scan-report.json
+          args: skims scan ./config.yml > scan-results/scan-output.txt
       
       - name: Generate summary report
         run: |
           echo "Scan completed at $(date)" > scan-results/summary.txt
           echo "Repository: ${{ github.repository }}" >> scan-results/summary.txt
           echo "Commit: ${{ github.sha }}" >> scan-results/summary.txt
-          if [ -f scan-results/scan-report.json ]; then
-            echo "Full results available in scan-report.json" >> scan-results/summary.txt
-          fi
-      
+          
       - name: Upload scan results
         uses: actions/upload-artifact@v4
         if: always()  # Upload artifacts even if the scan fails
